@@ -5,5 +5,7 @@ const OpCode = enum {
 };
 
 const Chunk = struct {
-    code: usize,
+    code: u8,
+    capacity: usize,
+    count: usize,
 };
