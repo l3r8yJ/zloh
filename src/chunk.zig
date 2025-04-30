@@ -12,6 +12,7 @@ pub const Chunk = struct {
     const Self = @This();
 
     code: []u8,
+    lines: []u8,
     constants: ValueArray,
     capacity: usize,
     count: usize,
@@ -20,6 +21,7 @@ pub const Chunk = struct {
         return Chunk{
             .count = 0,
             .capacity = 0,
+            .lines = undefined,
             .code = undefined,
             .constants = undefined,
         };
@@ -27,6 +29,8 @@ pub const Chunk = struct {
 
     pub fn deinit(this: *Self, allocator: std.mem.Allocator) void {
         allocator.free(this.code);
+        this.constants.deinit(allocator);
+        this.lines = &.{};
         this.code = &.{};
         this.count = 0;
         this.capacity = 0;

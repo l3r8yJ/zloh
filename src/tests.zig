@@ -7,7 +7,13 @@ const OpCode = @import("chunk.zig").OpCode;
 
 test "chunk: initalizes an empty chunk" {
     const empty = Chunk.init();
-    const expected = Chunk{ .code = undefined, .capacity = 0, .count = 0, .constants = undefined };
+    const expected = Chunk{
+        .code = undefined,
+        .constants = undefined,
+        .lines = undefined,
+        .capacity = 0,
+        .count = 0,
+    };
     try expectEqual(expected, empty);
 }
 
