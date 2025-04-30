@@ -69,3 +69,18 @@ test "chunk: reallocates the memory many times" {
 
     try expectEqual(size, chunk.count);
 }
+
+const debug = @import("debug.zig");
+
+test "debug: dissasembles a chunk" {
+    const allocator = gpa.allocator();
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_MULTIPLY));
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_HUIOP));
+
+    debug.disassembleChunk(&chunk, "Ruby's chunk");
+}
