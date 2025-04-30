@@ -23,7 +23,7 @@ test "chunk: reallocates the memory with enum" {
     var chunk = Chunk.init();
     defer chunk.deinit(allocator);
 
-    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN), 3);
     const actual: OpCode = @enumFromInt(chunk.code[0]);
 
     try expectEqual(actual, OpCode.OP_RETURN);
@@ -35,7 +35,7 @@ test "chunk: reallocates the memory with correct capacity" {
     var chunk = Chunk.init();
     defer chunk.deinit(allocator);
 
-    try chunk.write(allocator, 0x10);
+    try chunk.write(allocator, 0x10, 5);
 
     try expectEqual(chunk.capacity, 8);
 }
@@ -57,7 +57,7 @@ test "chunk: reallocates the memory with correct count" {
     var chunk = Chunk.init();
     defer chunk.deinit(allocator);
 
-    try chunk.write(allocator, 0x10);
+    try chunk.write(allocator, 0x10, 2);
 
     try expectEqual(chunk.count, 1);
 }
@@ -68,7 +68,7 @@ test "chunk: reallocates the memory with correct code" {
     var chunk = Chunk.init();
     defer chunk.deinit(allocator);
 
-    try chunk.write(allocator, 0x1a);
+    try chunk.write(allocator, 0x1a, 3);
 
     try expectEqual(26, chunk.code[0]);
 }
@@ -81,7 +81,7 @@ test "chunk: reallocates the memory many times" {
 
     const size = 15;
     for (0..size) |idx| {
-        try chunk.write(allocator, @intCast(idx));
+        try chunk.write(allocator, @intCast(idx), @intCast(idx));
     }
 
     try expectEqual(size, chunk.count);
@@ -97,9 +97,9 @@ test "debug: dissasembles a chunk" {
 
     const constant = try chunk.addConstant(allocator, 1.2);
 
-    try chunk.write(allocator, @intFromEnum(OpCode.OP_CONSTANT));
-    try chunk.write(allocator, @intCast(constant));
-    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_CONSTANT), 1);
+    try chunk.write(allocator, @intCast(constant), 1);
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN), 2);
 
     debug.disassembleChunk(&chunk, "Ruby's chunk");
 }

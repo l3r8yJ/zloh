@@ -36,12 +36,14 @@ pub const Chunk = struct {
         this.capacity = 0;
     }
 
-    pub fn write(this: *Self, allocator: std.mem.Allocator, byte: u8) !void {
+    pub fn write(this: *Self, allocator: std.mem.Allocator, byte: u8, line: u8) !void {
         if (this.capacity < this.count + 1) {
             this.capacity = growCapacity(this.capacity);
             this.code = try allocator.realloc(this.code, this.capacity);
+            this.lines = try allocator.realloc(this.lines, this.capacity);
         }
         this.code[this.count] = byte;
+        this.lines[this.count] = line;
         this.count = this.count + 1;
     }
 

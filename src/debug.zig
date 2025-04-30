@@ -15,6 +15,12 @@ pub fn disassembleChunk(chunk: *Chunk, name: []const u8) void {
 inline fn disassembleInstruction(chunk: *Chunk, offset: usize) usize {
     std.debug.print("{:0>4} ", .{offset});
 
+    if (offset > 0 and chunk.lines[offset] == chunk.lines[offset - 1]) {
+        std.debug.print(" | ", .{});
+    } else {
+        std.debug.print("{d:>4} ", .{chunk.lines[offset]});
+    }
+
     const instruction: OpCode = @enumFromInt(chunk.code[offset]);
 
     return switch (instruction) {
