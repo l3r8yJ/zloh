@@ -5,7 +5,7 @@ const OpCode = enum {
 };
 
 pub const Chunk = struct {
-    code: [*c]u8,
+    code: *u8,
     capacity: usize,
     count: usize,
 
