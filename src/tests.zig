@@ -117,9 +117,11 @@ test "value: creates value array empty correctly" {
     try expectEqual(expected, values);
 }
 
-const VM = @import("vm.zig").VM;
+const vmMod = @import("vm.zig");
+const VM = vmMod.VM;
+const InterpertResult = vmMod.InterpretResult;
 
-test "vm: doing vm things nice" {
+test "vm: interprets OP_RETURN correctly" {
     const allocator = gpa.allocator();
 
     var vm = VM.init();
@@ -132,5 +134,7 @@ test "vm: doing vm things nice" {
 
     debug.disassembleChunk(&chunk, "test chunk");
 
-    _ = try vm.interpert(&chunk);
+    const actual = try vm.interpert(&chunk);
+
+    try expectEqual(InterpertResult.INTERPERT_OK, actual);
 }
