@@ -134,7 +134,27 @@ test "vm: interprets OP_RETURN correctly" {
 
     debug.disassembleChunk(&chunk, "test chunk");
 
-    const actual = try vm.interpert(&chunk);
+    const actual = vm.interpert(&chunk);
+
+    try expectEqual(InterpertResult.INTERPERT_OK, actual);
+}
+
+test "vm: interprets OP_CONSTANT correctly" {
+    const allocator = gpa.allocator();
+
+    var vm = VM.init();
+    defer vm.free(allocator);
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_CONSTANT), 0);
+    _ = try chunk.addConstant(allocator, 5.2);
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN), 0);
+
+    debug.disassembleChunk(&chunk, "test chunk");
+
+    const actual = vm.interpert(&chunk);
 
     try expectEqual(InterpertResult.INTERPERT_OK, actual);
 }
