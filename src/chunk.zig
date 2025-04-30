@@ -19,6 +19,13 @@ pub const Chunk = struct {
         };
     }
 
+    pub fn deinit(this: *Self, allocator: std.mem.Allocator) void {
+        allocator.free(this.code);
+        this.code = &.{};
+        this.count = 0;
+        this.capacity = 0;
+    }
+
     pub fn write(this: *Self, allocator: std.mem.Allocator, byte: u8) !void {
         if (this.capacity < this.count + 1) {
             this.capacity = growCapacity(this.capacity);

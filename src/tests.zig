@@ -11,22 +11,48 @@ test "chunk: initalizes an empty chunk" {
 }
 
 test "chunk: reallocates the memory with correct capacity" {
-    var chunk = Chunk.init();
     const allocator = gpa.allocator();
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
     try chunk.write(allocator, 0x10);
+
     try expectEqual(chunk.capacity, 8);
 }
 
 test "chunk: reallocates the memory with correct count" {
-    var chunk = Chunk.init();
     const allocator = gpa.allocator();
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
     try chunk.write(allocator, 0x10);
+
     try expectEqual(chunk.count, 1);
 }
 
 test "chunk: reallocates the memory with correct code" {
-    var chunk = Chunk.init();
     const allocator = gpa.allocator();
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
     try chunk.write(allocator, 0x1a);
+
     try expectEqual(26, chunk.code[0]);
+}
+
+test "chunk: reallocates the memory many times" {
+    const allocator = gpa.allocator();
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
+    const size = 15;
+    for (0..size) |idx| {
+        try chunk.write(allocator, @intCast(idx));
+    }
+
+    try expectEqual(size, chunk.count);
 }
