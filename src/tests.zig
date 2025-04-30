@@ -18,8 +18,9 @@ test "chunk: reallocates the memory with enum" {
     defer chunk.deinit(allocator);
 
     try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
+    const actual: OpCode = @enumFromInt(chunk.code[0]);
 
-    try expectEqual(chunk.capacity, 8);
+    try expectEqual(actual, OpCode.OP_RETURN);
 }
 
 test "chunk: reallocates the memory with correct capacity" {
