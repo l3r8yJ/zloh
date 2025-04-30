@@ -20,7 +20,7 @@ pub const ValueArray = struct {
 
     pub fn deinit(this: *Self, allocator: std.mem.Allocator) void {
         allocator.free(this.values);
-        this.code = &.{};
+        this.values = &.{};
         this.count = 0;
         this.capacity = 0;
     }
