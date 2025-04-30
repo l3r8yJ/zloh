@@ -89,8 +89,11 @@ test "debug: dissasembles a chunk" {
     var chunk = Chunk.init();
     defer chunk.deinit(allocator);
 
-    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
+    const constant = try chunk.addConstant(allocator, 1.2);
+
     try chunk.write(allocator, @intFromEnum(OpCode.OP_CONSTANT));
+    try chunk.write(allocator, @intCast(constant));
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
 
     debug.disassembleChunk(&chunk, "Ruby's chunk");
 }

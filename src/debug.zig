@@ -19,11 +19,19 @@ inline fn disassembleInstruction(chunk: *Chunk, offset: usize) usize {
 
     return switch (instruction) {
         .OP_RETURN => simpleInstruction("OP_RETURN", offset),
-        .OP_CONSTANT => simpleInstruction("OP_CONSTANT", offset),
+        .OP_CONSTANT => constantInstruction("OP_CONSTANT", chunk, offset),
     };
 }
 
 inline fn simpleInstruction(name: []const u8, offset: usize) usize {
     std.debug.print("{s}\n", .{name});
     return offset + 1;
+}
+
+inline fn constantInstruction(name: []const u8, chunk: *Chunk, offset: usize) usize {
+    const constant = chunk.code[offset + 1];
+    std.debug.print("{s:<16} {d:>4} '", .{ name, constant });
+    std.debug.print("{d}", .{chunk.constants.values[constant]});
+    std.debug.print("'\n", .{});
+    return offset + 2;
 }
