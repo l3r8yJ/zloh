@@ -79,8 +79,6 @@ test "debug: dissasembles a chunk" {
     defer chunk.deinit(allocator);
 
     try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
-    try chunk.write(allocator, @intFromEnum(OpCode.OP_MULTIPLY));
-    try chunk.write(allocator, @intFromEnum(OpCode.OP_HUIOP));
 
     debug.disassembleChunk(&chunk, "Ruby's chunk");
 }
