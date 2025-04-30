@@ -99,6 +99,7 @@ test "debug: dissasembles a chunk" {
 
     try chunk.write(allocator, @intFromEnum(OpCode.OP_CONSTANT), 1);
     try chunk.write(allocator, @intCast(constant), 1);
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN), 1);
     try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN), 2);
 
     debug.disassembleChunk(&chunk, "Ruby's chunk");

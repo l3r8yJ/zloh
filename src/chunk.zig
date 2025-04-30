@@ -36,6 +36,14 @@ pub const Chunk = struct {
         this.capacity = 0;
     }
 
+    // TODO:
+    // “Devise an encoding that compresses the line information for a
+    //series of instructions on the same line. Change writeChunk() to write this
+    //compressed form, and implement a getLine() function that, given the index
+    //of an instruction, determines the line where the instruction occurs.
+    //Hint: It’s not necessary for getLine() to be particularly efficient.
+    //Since it is called only when a runtime error occurs, it is well off the
+    //critical path where performance matters.”
     pub fn write(this: *Self, allocator: std.mem.Allocator, byte: u8, line: u8) !void {
         if (this.capacity < this.count + 1) {
             this.capacity = growCapacity(this.capacity);
