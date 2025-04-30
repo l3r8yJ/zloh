@@ -116,3 +116,21 @@ test "value: creates value array empty correctly" {
     };
     try expectEqual(expected, values);
 }
+
+const VM = @import("vm.zig").VM;
+
+test "vm: doing vm things nice" {
+    const allocator = gpa.allocator();
+
+    var vm = VM.init();
+    defer vm.free(allocator);
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN), 0);
+
+    debug.disassembleChunk(&chunk, "test chunk");
+
+    _ = try vm.interpert(&chunk);
+}
