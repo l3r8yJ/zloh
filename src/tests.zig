@@ -3,11 +3,23 @@ const expectEqual = std.testing.expectEqual;
 
 var gpa = std.heap.GeneralPurposeAllocator(.{}){};
 const Chunk = @import("chunk.zig").Chunk;
+const OpCode = @import("chunk.zig").OpCode;
 
 test "chunk: initalizes an empty chunk" {
     const empty = Chunk.init();
     const expected = Chunk{ .code = undefined, .capacity = 0, .count = 0 };
     try expectEqual(expected, empty);
+}
+
+test "chunk: reallocates the memory with enum" {
+    const allocator = gpa.allocator();
+
+    var chunk = Chunk.init();
+    defer chunk.deinit(allocator);
+
+    try chunk.write(allocator, @intFromEnum(OpCode.OP_RETURN));
+
+    try expectEqual(chunk.capacity, 8);
 }
 
 test "chunk: reallocates the memory with correct capacity" {

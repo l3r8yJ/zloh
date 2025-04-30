@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub const OpCode = enum {
+pub const OpCode = enum(u8) {
     OP_RETURN,
 };
 
