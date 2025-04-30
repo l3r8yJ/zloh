@@ -5,5 +5,4 @@ const chunk = @import("chunk.zig");
 
 pub fn main() !void {
     std.log.info("Hello from main!", .{});
-    common.hi("Josh");
 }

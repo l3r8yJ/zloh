@@ -1,5 +1,5 @@
 const std = @import("std");
 
-pub fn hi(name: []const u8) void {
-    std.log.info("Hi, {s}!", .{name});
+pub inline fn growCapacity(capacity: usize) usize {
+    return if (capacity < 8) 8 else capacity * 2;
 }

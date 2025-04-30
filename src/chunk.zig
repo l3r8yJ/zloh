@@ -1,13 +1,18 @@
 const std = @import("std");
+const ValueArray = @import("value.zig").ValueArray;
+const Value = @import("value.zig").Value;
+const growCapacity = @import("common.zig").growCapacity;
 
 pub const OpCode = enum(u8) {
     OP_RETURN,
+    OP_CONSTANT,
 };
 
 pub const Chunk = struct {
     const Self = @This();
 
     code: []u8,
+    constants: ValueArray,
     capacity: usize,
     count: usize,
 
@@ -16,6 +21,7 @@ pub const Chunk = struct {
             .count = 0,
             .capacity = 0,
             .code = undefined,
+            .constants = undefined,
         };
     }
 
@@ -35,7 +41,9 @@ pub const Chunk = struct {
         this.count = this.count + 1;
     }
 
-    inline fn growCapacity(capacity: usize) usize {
-        return if (capacity < 8) 8 else capacity * 2;
+    pub fn addConstant(this: *Self, allocator: std.mem.Allocator, constant: Value) !usize {
+        try this.constants.write(allocator, constant);
+        // maybe + 1, not - 1, idk for a while...
+        return this.constants.count - 1;
     }
 };

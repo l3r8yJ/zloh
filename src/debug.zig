@@ -12,17 +12,18 @@ pub fn disassembleChunk(chunk: *Chunk, name: []const u8) void {
     }
 }
 
-fn disassembleInstruction(chunk: *Chunk, offset: usize) usize {
+inline fn disassembleInstruction(chunk: *Chunk, offset: usize) usize {
     std.debug.print("{:0>4} ", .{offset});
 
     const instruction: OpCode = @enumFromInt(chunk.code[offset]);
 
     return switch (instruction) {
         .OP_RETURN => simpleInstruction("OP_RETURN", offset),
+        .OP_CONSTANT => simpleInstruction("OP_CONSTANT", offset),
     };
 }
 
-fn simpleInstruction(name: []const u8, offset: usize) usize {
+inline fn simpleInstruction(name: []const u8, offset: usize) usize {
     std.debug.print("{s}\n", .{name});
     return offset + 1;
 }
