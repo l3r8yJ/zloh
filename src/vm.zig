@@ -1,4 +1,5 @@
 const std = @import("std");
+const movePtr = @import("common.zig").movePtr;
 const Chunk = @import("chunk.zig").Chunk;
 const OpCode = @import("chunk.zig").OpCode;
 const Value = @import("value.zig").Value;
@@ -48,11 +49,7 @@ pub const VM = struct {
 
     fn readByte(this: *Self) OpCode {
         const operation = this.ip.*;
-
-        var movable: [*]u8 = @ptrCast(this.ip);
-        movable += 1;
-
-        this.ip = @ptrCast(movable);
+        this.ip = movePtr(u8, this.ip);
         return @enumFromInt(operation);
     }
 
