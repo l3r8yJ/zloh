@@ -4,6 +4,8 @@ const Chunk = @import("chunk.zig").Chunk;
 const OpCode = @import("chunk.zig").OpCode;
 const Value = @import("value.zig").Value;
 
+const STACK_MAX: usize = 256;
+
 pub const InterpretResult = enum(u8) {
     INTERPERT_OK,
     INTERPRET_COMPILE_ERROR,
@@ -16,11 +18,15 @@ pub const VM = struct {
 
     chunk: *Chunk,
     ip: *u8,
+    stackTop: *Value,
+    stack: [STACK_MAX]Value,
 
     pub fn init() VM {
         return VM{
             .chunk = undefined,
             .ip = undefined,
+            .stackTop = undefined,
+            .stack = undefined,
         };
     }
 
